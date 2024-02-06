@@ -1,3 +1,6 @@
 Npm install
-npm run dev
+sudo npm install -g --force nodemon
+nodemon
+
+
 Make sure the Mongodb is connected.
