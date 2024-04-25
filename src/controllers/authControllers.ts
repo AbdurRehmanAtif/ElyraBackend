@@ -9,14 +9,14 @@ const authController = {
     // Asynchronous function for user registration
     async register(req: Request, res: Response, next: NextFunction) {
         try {
-            // Destructure username, email, and password from the request body
-            const { username, email, password } = req.body;
+            // Destructure email, and password from the request body
+            const { email, password } = req.body;
             // Validate the request body using the basicValidation method
             await validation.basicValidation(req.body);
             // Check if the provided username and email are already taken
-            await authService.ifEmailAndUsernameIsTaken(username, email);
+            await authService.ifEmailAndUsernameIsTaken(email);
             // Create a new user with the provided username, email, and password
-            const user = await authService.createUserWithEmail({ username, email, password });
+            const user = await authService.createUserWithEmail({email, password });
 
             // // Respond with a success status and the registered user's information
             return res.status(200).json(new apiResponse(200, 'User registered successfully', user));
@@ -29,11 +29,11 @@ const authController = {
     async login(req: Request, res: Response, next: NextFunction) {
         try {
             // Destructure username, email, and password from the request body
-            const { username, password } = req.body;
+            const { email, password } = req.body;
             // Validate the request body using the basicValidation method
             await validation.basicValidation(req.body);
             // Validate the request and see first if the user exist
-            const user = await authService.findOrFailUser(username);
+            const user = await authService.findOrFailUser(email);
             // Now check if the password is correct or not
             const result = await authService.performLogin(user, password);
             return res.status(200).json(new apiResponse(200, 'User login successfully', result));

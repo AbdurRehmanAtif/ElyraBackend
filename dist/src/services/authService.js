@@ -42,14 +42,13 @@ const apiError_1 = __importDefault(require("../utils/apiError"));
 const passwordUtils_1 = require("../../lib/passwordUtils");
 const authService = {
     createUserWithEmail(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ username, email, password }) {
+        return __awaiter(this, arguments, void 0, function* ({ email, password }) {
             try {
                 // Generate salt and hash for password
                 const { salt, hash } = utils.genPassword(password);
                 // Create a new user instance with hashed password
                 const newUser = new user_modal_1.default({
                     email: email,
-                    username: username,
                     hash: hash,
                     salt: salt,
                     role: 'USER'
@@ -61,8 +60,6 @@ const authService = {
                     const token = utils.issueJWT(user);
                     // Return a sanitized user object without sensitive information
                     const sanitizedUser = {
-                        _id: user._id.toString(),
-                        username: user.username,
                         email: user.email,
                         role: user.role,
                         isAdmin: user.admin,
@@ -70,24 +67,22 @@ const authService = {
                     };
                     return sanitizedUser;
                 }
-                throw new apiError_1.default(404, 'ServerResponseError', "Unable to create a new user");
+                throw new apiError_1.default(404, 'Server Response Error', "Unable to create a new user");
             }
             catch (error) {
-                throw new apiError_1.default(404, 'ServerResponseError', error.message);
+                throw new apiError_1.default(404, 'Server Response Error', error.message);
             }
         });
     },
-    ifEmailAndUsernameIsTaken(username, email) {
+    ifEmailAndUsernameIsTaken(email) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             try {
-                // Attempt to find a user with the provided email or username
-                const user = yield user_modal_1.default.findOne({
-                    $or: [{ username }, { email }]
-                });
+                // Attempt to find a user with the provided email
+                const user = yield user_modal_1.default.findOne({ email });
                 // If a user is found, reject the promise with a custom error message
                 if (user) {
-                    throw new apiError_1.default(404, 'ValidationError', "User with email or same username already exists");
+                    throw new apiError_1.default(404, 'Validation Error', "User with this email already exists");
                 }
                 // If no user is found, fulfill the promise with a value of true
                 return true;
@@ -97,18 +92,13 @@ const authService = {
             }
         });
     },
-    findOrFailUser(identifier) {
+    findOrFailUser(email) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Attempt to find a user with the provided email or username
-                const user = yield user_modal_1.default.findOne({
-                    $or: [
-                        { email: identifier },
-                        { username: identifier }
-                    ]
-                });
+                // Attempt to find a user with the provided email
+                const user = yield user_modal_1.default.findOne({ email });
                 if (!user) {
-                    throw new apiError_1.default(404, 'ValidationError', 'No user found with the provided credentials.');
+                    throw new apiError_1.default(404, 'ValidationError', '!!No user found with the provided credentials.');
                 }
                 return user;
             }
@@ -127,8 +117,6 @@ const authService = {
                 const token = utils.issueJWT(user);
                 // Return a sanitized user object without sensitive information
                 const sanitizedUser = {
-                    _id: user._id.toString(),
-                    username: user.username,
                     email: user.email,
                     role: user.role,
                     isAdmin: user.admin,

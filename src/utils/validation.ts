@@ -12,6 +12,7 @@ const Validation = {
             if (params) {
                 // Convert the params object to an array of [key, value] pairs
                 const bodyArray = Object.entries(params);
+            
                 // Iterate through the array to check if any value is empty
                 for (const [key, value] of bodyArray) {
                     // If a value is empty, reject the promise with a validation error

@@ -2,10 +2,8 @@ import mongoose, { Document, Model } from 'mongoose';
 
 // Define the interface for the User document
 interface UserDocument extends Document {
-    _id: string;
-    username?: string;
+
     email: string;
-    watchHistory: mongoose.Types.ObjectId[];
     salt: string;
     hash: string;
     role?: string;
@@ -18,17 +16,7 @@ interface UserModel extends Model<UserDocument> {
 
 // Define the user schema
 const userSchema = new mongoose.Schema<UserDocument>({
-    _id: {
-        type: String,
-    },
-    username: {
-        type: String,
-        required: false,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        index: true
-    },
+   
     email: {
         type: String,
         required: true,
@@ -36,12 +24,6 @@ const userSchema = new mongoose.Schema<UserDocument>({
         lowercase: true,
         trim: true,
     },
-    watchHistory: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Video"
-        }
-    ],
     salt: {
         type: String,
         required: [true, "Password is required"]
@@ -59,7 +41,7 @@ const userSchema = new mongoose.Schema<UserDocument>({
 });
 
 // Define the static method on the schema
-userSchema.statics.findByEmail = async function(email: string): Promise<UserDocument | null> {
+userSchema.statics.findByEmail = async function (email: string): Promise<UserDocument | null> {
     try {
         // Attempt to find a user with the provided email
         const user = await this.findOne({ email: email });

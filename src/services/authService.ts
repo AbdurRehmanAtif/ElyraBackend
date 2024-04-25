@@ -1,4 +1,5 @@
 import User from '../model/user.modal';
+import mongoose from 'mongoose';
 // Assuming the correct path to the User model
 import * as utils from '../../lib/passwordUtils'; // Assuming the correct path to passwordUtils module
 import ApiError from '../utils/apiError';
@@ -7,29 +8,21 @@ import ApiResponse from '../utils/apiResponse';
 import * as mailService from './mailService';
 
 interface SanitizedUser {
-    _id: string;
-    username: string;
     email: string;
     role: string;
     isAdmin: boolean;
     token: any;
 }
-interface Error {
-
-    message: any
-}
 
 const authService = {
 
-    async createUserWithEmail({ username, email, password }: { username: string, email: string, password: string }): Promise<SanitizedUser> {
+    async createUserWithEmail({ email, password }: { email: string, password: string }): Promise<SanitizedUser> {
         try {
             // Generate salt and hash for password
             const { salt, hash } = utils.genPassword(password);
-
             // Create a new user instance with hashed password
             const newUser = new User({
                 email: email,
-                username: username,
                 hash: hash,
                 salt: salt,
                 role: 'USER'
@@ -43,8 +36,6 @@ const authService = {
                 const token = utils.issueJWT(user);
                 // Return a sanitized user object without sensitive information
                 const sanitizedUser: SanitizedUser = {
-                    _id: user._id.toString(),
-                    username: user.username,
                     email: user.email,
                     role: user.role,
                     isAdmin: user.admin,
@@ -53,22 +44,20 @@ const authService = {
 
                 return sanitizedUser;
             }
-            throw new ApiError(404, 'ServerResponseError', "Unable to create a new user");
+            throw new ApiError(404, 'Server Response Error', "Unable to create a new user");
         } catch (error: any) {
-            throw new ApiError(404, 'ServerResponseError', error.message);
+            throw new ApiError(404, 'Server Response Error', error.message);
         }
     },
 
-    async ifEmailAndUsernameIsTaken(username: string, email: string): Promise<boolean> {
+    async ifEmailAndUsernameIsTaken(email: string): Promise<boolean> {
         try {
-            // Attempt to find a user with the provided email or username
-            const user = await User.findOne({
-                $or: [{ username }, { email }]
-            });
+            // Attempt to find a user with the provided email
+            const user = await User.findOne({ email });
 
             // If a user is found, reject the promise with a custom error message
             if (user) {
-                throw new ApiError(404, 'ValidationError', "User with email or same username already exists");
+                throw new ApiError(404, 'Validation Error', "User with this email already exists");
             }
 
             // If no user is found, fulfill the promise with a value of true
@@ -79,18 +68,13 @@ const authService = {
         }
     },
 
-    async findOrFailUser(identifier: string) {
+    async findOrFailUser(email: string) {
         try {
-            // Attempt to find a user with the provided email or username
-            const user = await User.findOne({
-                $or: [
-                    { email: identifier },
-                    { username: identifier }
-                ]
-            });
+            // Attempt to find a user with the provided email
+            const user = await User.findOne({ email });
 
             if (!user) {
-                throw new ApiError(404, 'ValidationError', 'No user found with the provided credentials.');
+                throw new ApiError(404, 'ValidationError', '!!No user found with the provided credentials.');
             }
 
             return user;
@@ -110,8 +94,8 @@ const authService = {
             const token = utils.issueJWT(user);
             // Return a sanitized user object without sensitive information
             const sanitizedUser: SanitizedUser = {
-                _id: user._id.toString(),
-                username: user.username,
+
+
                 email: user.email,
                 role: user.role,
                 isAdmin: user.admin,

@@ -28,7 +28,7 @@ app.use(passport.session());
 // //use JWT Passport
 passport.use(passportJWT_1.default.strategy);
 // start listining to routes
-app.use('/anthingHereWillBeRoute', router);
+// app.use('/anthingHereWillBeRoute', router);
 // //Basic JWT routes
 app.use('', (0, JWTAuth_1.default)(router));
 // //User Profile Routes

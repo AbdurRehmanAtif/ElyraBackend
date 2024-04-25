@@ -29,7 +29,7 @@ app.use(passport.session());
 // //use JWT Passport
 passport.use(passportJWT.strategy);
 // start listining to routes
-app.use('/anthingHereWillBeRoute', router);
+// app.use('/anthingHereWillBeRoute', router);
 
 // //Basic JWT routes
 app.use('', JWTAuthRoutes(router));

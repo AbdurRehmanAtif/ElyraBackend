@@ -15,17 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 // Define the user schema
 const userSchema = new mongoose_1.default.Schema({
-    _id: {
-        type: String,
-    },
-    username: {
-        type: String,
-        required: false,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        index: true
-    },
     email: {
         type: String,
         required: true,
@@ -33,12 +22,6 @@ const userSchema = new mongoose_1.default.Schema({
         lowercase: true,
         trim: true,
     },
-    watchHistory: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "Video"
-        }
-    ],
     salt: {
         type: String,
         required: [true, "Password is required"]
