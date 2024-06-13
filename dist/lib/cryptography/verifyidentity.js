@@ -13,7 +13,7 @@ function verifuIdentity() {
     const publicKey = fs_1.default.readFileSync('../../public-key.pem', 'utf-8');
     const decryptedMessage = decrypt_1.default.decryptWithPublicKey(publicKey, receivedData.signedAndEncryptedData);
     const decryptedMessageHex = decryptedMessage;
-    const hashOfOriginal = hash.update(JSON.stringify(receivedData.originalData));
+    hash.update(JSON.stringify(receivedData.originalData));
     const hashOfOriginalHex = hash.digest('hex');
     if (hashOfOriginalHex === decryptedMessageHex) {
         return true;

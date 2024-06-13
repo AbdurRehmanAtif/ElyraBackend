@@ -1,26 +1,26 @@
+import { ApiErrorResponse } from "../types/api";
+
 class ApiError extends Error {
     public statusCode: number;
-    public data: any | null;
     public success: boolean;
-    public errors: any[];
-    public errorLog: string;
+    public title: string;
+    public errorLog?: string;
+    public stack?: string;
 
-    constructor(
-        statusCode: number,
-        errorLog: string = "",
-        message: string = "Something went wrong",
-        errors: any[] = [],
-        stack: string = ""
-    ) {
-        super(message);
-        this.statusCode = statusCode;
-        this.data = null;
-        this.success = false;
-        this.errors = errors;
-        this.errorLog = errorLog;
+    constructor(err: ApiErrorResponse) {
+        super(err.message || err.title); // Use the message or title from the error response
+        this.name = "ApiError"; // Set the name property to "ApiError" (optional)
 
-        if (stack) {
-            this.stack = stack;
+        // Assign properties from the error response
+        this.statusCode = err.statusCode;
+        this.success = err.success;
+        this.title = err.title;
+        this.errorLog = err.errorLog;
+        this.stack = err.stack;
+        this.errorLog = err.title
+        // Capture stack trace if available
+        if (err.stack) {
+            this.stack = err.stack;
             Error.captureStackTrace(this, this.constructor);
         }
     }

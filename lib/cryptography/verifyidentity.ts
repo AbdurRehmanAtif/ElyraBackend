@@ -12,7 +12,7 @@ function verifuIdentity() {
     const decryptedMessage = decrypt.decryptWithPublicKey(publicKey, receivedData.signedAndEncryptedData);
     const decryptedMessageHex = decryptedMessage;
 
-    const hashOfOriginal = hash.update(JSON.stringify(receivedData.originalData));
+    hash.update(JSON.stringify(receivedData.originalData));
     const hashOfOriginalHex = hash.digest('hex');
 
     if (hashOfOriginalHex === decryptedMessageHex) {

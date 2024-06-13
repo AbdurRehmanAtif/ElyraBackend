@@ -1,14 +1,15 @@
 // Import modules using ES module syntax
 import http from './config/http';
-import mongodb from './config/mongodb';
-import JWTAuthRoutes from './src/routes/JWTAuth';
+import AuthRoute from './src/routes/authRoutes';
+import SessionHandshake from './src/routes/SessionHandshake';
 import session from './config/sessions';
-import passport = require('passport')
-import passportJWT from './config/passportJWT';
-import userProfileRoutes from './src/routes/userRoute';
+import passport = require('passport');
+import ProfileRoute from './src/routes/profileRoutes';
 import dotenv = require('dotenv')
 import "./config/passportLocal";
 import express, { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
+import { DatabaseProviderFactory, DatabaseType } from './src/factory/databaseProviderFactory';
+import CPassport from './lib/security/Passport';
 
 dotenv.config();
 
@@ -16,25 +17,28 @@ dotenv.config();
 const app = http.expressInit();
 const router = http.startRouting();
 
-// // Connect to cloud Mongo
-const MONGO_DB_URL = process.env.MONGO_DB_URL ? process.env.MONGO_DB_URL : "";
-mongodb.connectMongo(app, MONGO_DB_URL);
+const dbFactory = new DatabaseProviderFactory()
+const databaseType = [DatabaseType.MongoDB]
+dbFactory.createDatabaseProviders(databaseType);
+
 
 // //setting session 
 session.setupSessionStore(app)
 // //Use  Passport Auth
-app.use(passport.initialize());
-app.use(passport.session());
 
+// app.use(passport.session());
 // //use JWT Passport
-passport.use(passportJWT.strategy);
-// start listining to routes
-// app.use('/anthingHereWillBeRoute', router);
+const cPassport = new CPassport(app);
+cPassport.initPassportJWT()
+cPassport.initPassportLocal()
 
-// //Basic JWT routes
-app.use('', JWTAuthRoutes(router));
-// //User Profile Routes
-app.use('', userProfileRoutes(router));
+
+//Session Routes
+app.use('', SessionHandshake(router));
+// // //Basic JWT routes
+app.use('', AuthRoute(router));
+// // //User Profile Routes
+app.use('', ProfileRoute(router));
 
 const errorHandler: ErrorRequestHandler = (error: any, req: Request, res: Response, next: NextFunction) => {
     res.status(error.statusCode || 500).json({

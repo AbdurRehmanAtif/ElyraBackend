@@ -26,7 +26,7 @@ const Validation = {
                     for (const [key, value] of bodyArray) {
                         // If a value is empty, reject the promise with a validation error
                         if (!value || !key) {
-                            throw new apiError_1.default(200, 'ValidationError', `Validation failed: ${key} cannot be empty.`);
+                            throw new apiError_1.default({ success: false, statusCode: 404, title: "Validation Error", message: `Validation failed: ${key} cannot be empty.` });
                         }
                     }
                 }

@@ -7,12 +7,18 @@ function expressInit() {
     // let the api use json requests
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use(cors());
+    // Configure CORS middleware
+    app.use(cors({
+        origin: '*', // Allow requests from this origin
+        methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
+        allowedHeaders: ['Content-Type', 'Authorization', 'SecretSessionId', 'cache-control'], // Allow these headers
+    }));
 
     // Middleware to set CORS headers
     app.use((req, res, next) => {
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.setHeader('Access-Control-Allow-Headers', 'Authorization, SecretSessionId');
         next();
     });
     return app;
@@ -29,11 +35,12 @@ function expressStart(app: any, PORT: number) {
 
 function startRouting() {
     const router = express.Router();
-
     router.get('/', (req, res, next) => {
+
+        console.log(req.session)
+        console.log(req.user)
         res.send('Server is Responsing');
     });
-
     return router;
 }
 
