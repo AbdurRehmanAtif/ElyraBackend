@@ -26,7 +26,7 @@ function expressInit() {
 function expressStart(app, PORT) {
     // start the app on specific PORT
     app.listen(PORT, () => {
-        console.log(`App is listening to ${process.env.PORT}`);
+        console.log(`App is listening to  ${process.env.PORT}`);
     });
 }
 function startRouting() {

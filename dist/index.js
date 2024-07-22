@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // Import modules using ES module syntax
-const http_1 = __importDefault(require("./config/http"));
+const http_1 = __importDefault(require("./src/config/http"));
 const authRoutes_1 = __importDefault(require("./src/routes/authRoutes"));
 const SessionHandshake_1 = __importDefault(require("./src/routes/SessionHandshake"));
-const sessions_1 = __importDefault(require("./config/sessions"));
+const sessions_1 = __importDefault(require("./src/config/sessions"));
 const profileRoutes_1 = __importDefault(require("./src/routes/profileRoutes"));
-const dotenv = require("dotenv");
-require("./config/passportLocal");
+const dotenv_1 = __importDefault(require("dotenv"));
+require("./src/config/passportLocal");
 const databaseProviderFactory_1 = require("./src/factory/databaseProviderFactory");
-const Passport_1 = __importDefault(require("./lib/security/Passport"));
-dotenv.config();
+const Passport_1 = __importDefault(require("./src/lib/security/Passport"));
+dotenv_1.default.config();
 // Start the Http Server
 const app = http_1.default.expressInit();
 const router = http_1.default.startRouting();

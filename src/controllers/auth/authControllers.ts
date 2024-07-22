@@ -47,7 +47,7 @@ const authController = {
                 role: newUser.role,
             };
             // Use sanitizedUser as needed (e.g., return it as part of the response)
-            return res.status(200).json(new apiResponse(200, 'User registered successfully', sanitizedUser));
+            return res.status(200).json(new apiResponse(200, 'User Registeration', 'User registered successfully', sanitizedUser));
         } catch (error) {
             // If an error occurs, pass it to the next middleware for handling
             next(error);
@@ -74,7 +74,7 @@ const authController = {
                 email: user.email,
                 role: user.role,
             };
-            return res.status(200).json(new apiResponse(200, 'User login successfully', sanitizedUser));
+            return res.status(200).json(new apiResponse(200, '','User login successfully', sanitizedUser));
 
         } catch (error) {
             next(error)
@@ -89,7 +89,7 @@ const authController = {
         await validation.basicValidation(req.body);
         // Perform forgot password
         const result = await authService.forgotPassword(email);
-        return res.status(200).json(new apiResponse(200, `An email has been sent to ${email} with instructions for resetting your password.`, result));
+        return res.status(200).json(new apiResponse(200,'', `An email has been sent to ${email} with instructions for resetting your password.`, result));
 
     },
 

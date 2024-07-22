@@ -3,7 +3,7 @@ import passport = require('passport')
 import { Strategy as localStrategy } from 'passport-local';
 
 // import User from '../src/model/user.modal.js';
-import { verifyPassword } from '../src/utils/password.js';
+import { verifyPassword } from '../utils/password.js';
 
 
 const verifyCallBack = async (username: string, password: string, done: any) => {

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-const encrypt: any = require('../../lib/cryptography/encrypt.js');
-const decrypt: any = require('../../lib/cryptography/decrypt.js');
+const encrypt: any = require('../../src/lib/cryptography/encrypt.js');
+const decrypt: any = require('../../src/lib/cryptography/decrypt.js');
 
 import fs from 'fs';
 

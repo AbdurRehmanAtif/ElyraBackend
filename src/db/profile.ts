@@ -1,5 +1,5 @@
 import mongoose, { Types } from 'mongoose';
-import CryptographicService from '../../lib/security/CryptographicService';
+import CryptographicService from '../lib/security/CryptographicService';
 
 // Define the interface for the User document
 interface ProfileDocument {
@@ -33,7 +33,7 @@ const userProfileSchema = new mongoose.Schema(
 userProfileSchema.pre('findOneAndUpdate', async function (next) {
     // 'this' refers to the query being executed
     const update = this.getUpdate();
-
+    console.log("Fnd one and update working")
     // Check if there is an update and it includes $set
     if (update && ('$set' in update)) {
         const publicKey = cryptoService.PublicKey()

@@ -1,8 +1,8 @@
-import { Profile } from '../model/Profile.js';
-import UserAddress from '../model/address.js';
-import decrypt from '../../lib/cryptography/decrypt.js';
+import { Profile } from '../model/Profile';
+import UserAddress from '../model/address';
+import decrypt from '../lib/cryptography/decrypt';
 import fs from 'fs';
-import ApiError from '../utils/apiError.js';
+import ApiError from '../utils/apiError';
 import mongoose from 'mongoose';
 
 const { Types: { ObjectId } } = mongoose;
@@ -48,8 +48,6 @@ const ProfileService = {
                 userId,
                 ...requestData
             };
-
-            console.log("request Data", requestData)
             // Find and update or create a user profile in the database
             const results = await Profile.findOneAndUpdate(
                 { userId: userId },  // The filter criteria for finding the document to update
@@ -61,7 +59,8 @@ const ProfileService = {
                 }
             ).select('-userId');
             // Return the saved or updated user profile
-            return results;
+            return this.getUserProfileByID(_id)
+        
         } catch (error: any) {
             // If an error occurs during the database query or any other asynchronous operation,
             // reject the promise with the caught error for consistent error handling

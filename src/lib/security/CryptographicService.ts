@@ -3,6 +3,7 @@ const crypt = require('crypto');
 const path = require('path');
 
 
+
 export default class CryptographicService {
 
     private PUBLIC_KEY: string = ""

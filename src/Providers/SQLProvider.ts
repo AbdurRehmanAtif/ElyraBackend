@@ -1,3 +1,3 @@
-class SQLProvider {
+export default class SQLProvider {
 
 }

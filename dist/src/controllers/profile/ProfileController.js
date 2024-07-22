@@ -12,22 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const apiResponse_js_1 = __importDefault(require("../../utils/apiResponse.js"));
-const validation_js_1 = __importDefault(require("../../utils/validation.js"));
-const AuthService_js_1 = __importDefault(require("../../services/AuthService.js"));
-const ProfileService_js_1 = __importDefault(require("../../services/ProfileService.js"));
+const apiResponse_1 = __importDefault(require("../../utils/apiResponse"));
+const validation_1 = __importDefault(require("../../utils/validation"));
+const AuthService_1 = __importDefault(require("../../services/AuthService"));
+const ProfileService_1 = __importDefault(require("../../services/ProfileService"));
 const ProfileController = {
     saveProfile(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 //basic validation
-                yield validation_js_1.default.basicValidation(req.body);
+                // await Validation.basicValidation(req.body);
                 // Loop through the keys in req.body
-                const _id = yield AuthService_js_1.default.getUserIDFromJWT(req);
+                const _id = yield AuthService_1.default.getUserIDFromJWT(req);
                 // Save the results in profile
-                const result = yield ProfileService_js_1.default.saveUserProfile(req, _id);
+                const result = yield ProfileService_1.default.saveUserProfile(req, _id);
                 // Respond with a success status and the registered user's information
-                return res.status(200).json(new apiResponse_js_1.default(200, 'Profile information saved successfully', result));
+                return res.status(200).json(new apiResponse_1.default(200, 'Profile Update Confirmation', 'Profile information has been successfully updated.', result));
             }
             catch (err) {
                 next(err);
@@ -38,14 +38,14 @@ const ProfileController = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Loop through the keys in req.body
-                const _id = yield AuthService_js_1.default.getUserIDFromJWT(req);
+                const _id = yield AuthService_1.default.getUserIDFromJWT(req);
                 // Save the results in profile
-                let profile = yield ProfileService_js_1.default.getUserProfileByID(_id);
+                let profile = yield ProfileService_1.default.getUserProfileByID(_id);
                 // if results are null return a user object but with emai
                 const user = req.user;
                 const result = Object.assign(Object.assign({}, profile === null || profile === void 0 ? void 0 : profile.toObject()), { "email": user.email });
                 // // Respond with a success status and the registered user's information
-                return res.status(200).json(new apiResponse_js_1.default(200, 'Profile information retrieved successfully', result));
+                return res.status(200).json(new apiResponse_1.default(200, '', 'Profile information retrieved successfully', result));
             }
             catch (err) {
                 next(err);
@@ -56,13 +56,13 @@ const ProfileController = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 //basic validation
-                yield validation_js_1.default.basicValidation(req.body);
+                yield validation_1.default.basicValidation(req.body);
                 // Loop through the keys in req.body
-                const _id = yield AuthService_js_1.default.getUserIDFromJWT(req);
+                const _id = yield AuthService_1.default.getUserIDFromJWT(req);
                 // Save the results in profile
-                const result = yield ProfileService_js_1.default.saveAddress(req, _id);
+                const result = yield ProfileService_1.default.saveAddress(req, _id);
                 // Respond with a success status and the registered user's information
-                return res.status(200).json(new apiResponse_js_1.default(200, 'Address information saved successfully', result));
+                return res.status(200).json(new apiResponse_1.default(200, '', 'Address information saved successfully', result));
             }
             catch (err) {
                 next(err);
@@ -73,12 +73,12 @@ const ProfileController = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Loop through the keys in req.body
-                const _id = yield AuthService_js_1.default.getUserIDFromJWT(req);
+                const _id = yield AuthService_1.default.getUserIDFromJWT(req);
                 // Save the results in profile
-                let result = yield ProfileService_js_1.default.profileDetails(_id);
-                result = yield ProfileService_js_1.default.DecryptProfileDetails(result);
+                let result = yield ProfileService_1.default.profileDetails(_id);
+                result = yield ProfileService_1.default.DecryptProfileDetails(result);
                 // Respond with a success status and the registered user's information
-                return res.status(200).json(new apiResponse_js_1.default(200, '', result));
+                return res.status(200).json(new apiResponse_1.default(200, '', '', result));
             }
             catch (err) {
                 next(err);

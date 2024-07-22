@@ -8,9 +8,9 @@ const MongoStore = require("connect-mongo");
 const Session = require("express-session");
 const PassportJWT = require("passport-jwt");
 const PassportLocal = require("passport-local");
-const user_1 = require("../../src/model/user");
+const user_1 = require("../../model/user");
 const CryptographicService_1 = __importDefault(require("./CryptographicService"));
-const apiError_1 = __importDefault(require("../../src/utils/apiError"));
+const apiError_1 = __importDefault(require("../../utils/apiError"));
 class CPassport extends CryptographicService_1.default {
     constructor(app) {
         super();

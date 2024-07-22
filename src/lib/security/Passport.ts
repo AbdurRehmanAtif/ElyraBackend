@@ -1,16 +1,14 @@
 import passport from 'passport';
 import MongoStore = require('connect-mongo');
 import Session = require('express-session');
-import fs = require('fs')
 import path = require('path')
 import PassportJWT = require('passport-jwt')
 import PassportLocal = require('passport-local')
-import { User } from "../../src/model/user";
+import { User } from "../../model/user";
 import CryptographicService from "./CryptographicService";
 import { Express } from 'express-serve-static-core';
-import { UsersDocument } from '../../src/db/users';
-import ApiError from '../../src/utils/apiError';
-import { authUser } from '../../src/controllers/auth/authControllers';
+import ApiError from '../../utils/apiError';
+import { authUser } from '../../controllers/auth/authControllers';
 
 
 export default class CPassport extends CryptographicService {

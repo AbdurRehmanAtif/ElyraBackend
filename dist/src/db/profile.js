@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userProfile = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const CryptographicService_1 = __importDefault(require("../../lib/security/CryptographicService"));
+const CryptographicService_1 = __importDefault(require("../lib/security/CryptographicService"));
 const cryptoService = new CryptographicService_1.default();
 const userProfileSchema = new mongoose_1.default.Schema({
     userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' },
@@ -31,6 +31,7 @@ userProfileSchema.pre('findOneAndUpdate', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         // 'this' refers to the query being executed
         const update = this.getUpdate();
+        console.log("Fnd one and update working");
         // Check if there is an update and it includes $set
         if (update && ('$set' in update)) {
             const publicKey = cryptoService.PublicKey();

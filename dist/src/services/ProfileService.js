@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Profile_js_1 = require("../model/Profile.js");
-const address_js_1 = __importDefault(require("../model/address.js"));
-const decrypt_js_1 = __importDefault(require("../../lib/cryptography/decrypt.js"));
+const Profile_1 = require("../model/Profile");
+const address_1 = __importDefault(require("../model/address"));
+const decrypt_1 = __importDefault(require("../lib/cryptography/decrypt"));
 const fs_1 = __importDefault(require("fs"));
-const apiError_js_1 = __importDefault(require("../utils/apiError.js"));
+const apiError_1 = __importDefault(require("../utils/apiError"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const { Types: { ObjectId } } = mongoose_1.default;
 const ProfileService = {
@@ -32,13 +32,13 @@ const ProfileService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Find and update or create a user profile in the database
-                const result = yield Profile_js_1.Profile.findOne({ userId: _id }).select('-userId');
+                const result = yield Profile_1.Profile.findOne({ userId: _id }).select('-userId');
                 return result;
             }
             catch (error) {
                 // If an error occurs during the database query or any other asynchronous operation,
                 // reject the promise with the caught error for consistent error handling
-                throw new apiError_js_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
+                throw new apiError_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
             }
         });
     },
@@ -50,9 +50,8 @@ const ProfileService = {
                 // Add userID to the user profile data
                 const userId = _id;
                 requestData = Object.assign({ userId }, requestData);
-                console.log("request Data", requestData);
                 // Find and update or create a user profile in the database
-                const results = yield Profile_js_1.Profile.findOneAndUpdate({ userId: userId }, // The filter criteria for finding the document to update
+                const results = yield Profile_1.Profile.findOneAndUpdate({ userId: userId }, // The filter criteria for finding the document to update
                 { $set: requestData }, // The update operation - sets the fields in `requestData`
                 {
                     upsert: true, // If no document matches the filter, create a new one
@@ -60,12 +59,12 @@ const ProfileService = {
                     setDefaultsOnInsert: true // Sets default values if a new document is inserted
                 }).select('-userId');
                 // Return the saved or updated user profile
-                return results;
+                return this.getUserProfileByID(_id);
             }
             catch (error) {
                 // If an error occurs during the database query or any other asynchronous operation,
                 // reject the promise with the caught error for consistent error handling
-                throw new apiError_js_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
+                throw new apiError_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
             }
         });
     },
@@ -78,21 +77,21 @@ const ProfileService = {
                 const userId = _id;
                 requestData = Object.assign({ userId }, requestData);
                 // Find and update or create a user profile in the database
-                const results = yield address_js_1.default.findOneAndUpdate({ userId: userId }, { $set: requestData }, { upsert: true, new: true, setDefaultsOnInsert: true }).select('-userId');
+                const results = yield address_1.default.findOneAndUpdate({ userId: userId }, { $set: requestData }, { upsert: true, new: true, setDefaultsOnInsert: true }).select('-userId');
                 // Return the saved or updated user profile
                 return results;
             }
             catch (error) {
                 // If an error occurs during the database query or any other asynchronous operation,
                 // reject the promise with the caught error for consistent error handling
-                throw new apiError_js_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
+                throw new apiError_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
             }
         });
     },
     profileDetails(_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield Profile_js_1.Profile.aggregate([
+                const result = yield Profile_1.Profile.aggregate([
                     {
                         $match: { userId: new ObjectId(_id) }
                     },
@@ -119,7 +118,7 @@ const ProfileService = {
             catch (error) {
                 // If an error occurs during the database query or any other asynchronous operation,
                 // reject the promise with the caught error for consistent error handling
-                throw new apiError_js_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
+                throw new apiError_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
             }
         });
     },
@@ -151,7 +150,7 @@ const ProfileService = {
                     }
                     function decryptValue(value) {
                         const encryptedData = Buffer.from(value, 'base64');
-                        const result = decrypt_js_1.default.decryptWithPrivateKey(privateKey, encryptedData);
+                        const result = decrypt_1.default.decryptWithPrivateKey(privateKey, encryptedData);
                         return result.toString('utf-8');
                     }
                     return parsedArray;
@@ -161,7 +160,7 @@ const ProfileService = {
             catch (error) {
                 // If an error occurs during the database query or any other asynchronous operation,
                 // reject the promise with the caught error for consistent error handling
-                throw new apiError_js_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
+                throw new apiError_1.default({ success: false, statusCode: 404, title: "Something went wrong!", message: error.message });
             }
         });
     }

@@ -1,15 +1,14 @@
 // Import modules using ES module syntax
-import http from './config/http';
+import http from './src/config/http';
 import AuthRoute from './src/routes/authRoutes';
 import SessionHandshake from './src/routes/SessionHandshake';
-import session from './config/sessions';
-import passport = require('passport');
+import session from './src/config/sessions';
 import ProfileRoute from './src/routes/profileRoutes';
-import dotenv = require('dotenv')
-import "./config/passportLocal";
+import dotenv from "dotenv"
+import "./src/config/passportLocal";
 import express, { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 import { DatabaseProviderFactory, DatabaseType } from './src/factory/databaseProviderFactory';
-import CPassport from './lib/security/Passport';
+import CPassport from './src/lib/security/Passport';
 
 dotenv.config();
 

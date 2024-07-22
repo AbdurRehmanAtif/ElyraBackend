@@ -21,7 +21,6 @@ class DatabaseProviderFactory {
                     break;
                 case DatabaseType.SQL:
                     // Create SQL database provider instance
-                    new SQLProvider();
                     break;
                 default:
                     throw new Error(`Unsupported database type: ${databaseType}`);

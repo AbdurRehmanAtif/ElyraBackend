@@ -21,6 +21,7 @@ function expressInit() {
         res.setHeader('Access-Control-Allow-Headers', 'Authorization, SecretSessionId');
         next();
     });
+
     return app;
 }
 
@@ -28,7 +29,7 @@ function expressInit() {
 function expressStart(app: any, PORT: number) {
     // start the app on specific PORT
     app.listen(PORT, () => {
-        console.log(`App is listening to ${process.env.PORT}`);
+        console.log(`App is listening to  ${process.env.PORT}`);
     })
 
 }

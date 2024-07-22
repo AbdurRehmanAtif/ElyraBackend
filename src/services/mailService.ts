@@ -1,4 +1,4 @@
-import mailConfig from '../../config/mailable.js';
+import mailConfig from '../config/mailable';
 
 const mailService = {
     // Constructor not needed here
